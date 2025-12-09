@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model ProductType {
+  id           Int       @id @default(autoincrement())
+  name         String    @unique
+  coefficient  Float
+  products     Product[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("product_types")
+}
+
+model Material {
+  id           Int       @id @default(autoincrement())
+  name         String    @unique
+  lossPercent  Float
+  products     Product[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("materials")
+}
+
+model Workshop {
+  id       Int                 @id @default(autoincrement())
+  name     String              @unique
+  type     String
+  workers  Int
+  products ProductWorkshop[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@map("workshops")
+}
+
+model Product {
+  id           Int                 @id @default(autoincrement())
+  name         String
+  article      String              @unique
+  typeId       Int
+  materialId   Int
+  minPrice     Float
+  type         ProductType         @relation(fields: [typeId], references: [id], onDelete: Cascade)
+  material     Material            @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  workshops    ProductWorkshop[]
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  @@map("products")
+}
+
+model ProductWorkshop {
+  id             Int      @id @default(autoincrement())
+  productId      Int
+  workshopId     Int
+  productionTime Float
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  workshop       Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([productId, workshopId])
+  @@map("product_workshops")
+}

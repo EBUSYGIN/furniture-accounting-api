@@ -1,10 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import { BaseController } from '../../common/controller/base.controller';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { HTTPError } from '../../common/errors/http.error';
+import { ProductsService } from '../../services/products.service';
+import { TYPES } from '../../common/config.di';
 
 @injectable()
 export class ProductsController extends BaseController {
-  constructor() {
+  constructor(
+    @inject(TYPES.ProductsService) private productsService: ProductsService
+  ) {
     super();
     this.bindRoutes([
       {
@@ -35,8 +40,17 @@ export class ProductsController extends BaseController {
     ]);
   }
 
-  getAllProducts({ body }: Request, response: Response, next: NextFunction) {
-    //работа сервиса + репозитория
-    return this.ok(response, 200);
+  async getAllProducts(
+    { body }: Request,
+    response: Response,
+    next: NextFunction
+  ) {
+    const products = await this.productsService.findAll();
+
+    if (!products) {
+      next(new HTTPError(400, 'Ошибка фильтра'));
+    } else {
+      this.ok(response, { products });
+    }
   }
 }

@@ -1,14 +1,24 @@
 import { inject, injectable } from 'inversify';
-import { IConfigService } from '../common/env-service/config.service.interface';
+import { ILogger } from '../common/logger/logger.interface';
+import { IProductsRepository } from '../repositories/products.interface';
 import { TYPES } from '../common/config.di';
+import { ProductsRepository } from '../repositories/products.repository';
 
 @injectable()
 export class ProductsService {
-  private configService: IConfigService;
+  private loggerService: ILogger;
+  private productsRepository: IProductsRepository;
 
-  constructor(@inject(TYPES.ConfigService) configService: IConfigService) {
-    this.configService = configService;
+  constructor(
+    @inject(TYPES.ProductsRepository) productsRepository: ProductsRepository,
+    @inject(TYPES.Logger) loggerService: ILogger
+  ) {
+    this.loggerService = loggerService;
+    this.productsRepository = productsRepository;
   }
 
-  async getAllProducts();
+  async findAll() {
+    const products = await this.productsRepository.getAllProducts();
+    return products;
+  }
 }

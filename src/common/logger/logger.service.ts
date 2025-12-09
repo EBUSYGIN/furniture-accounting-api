@@ -4,7 +4,7 @@ import { injectable } from 'inversify';
 
 @injectable()
 export class LoggerService implements ILogger {
-  public logger: Logger<ILogObj>;
+  private logger: Logger<ILogObj>;
 
   constructor() {
     const loggerTemplate =
