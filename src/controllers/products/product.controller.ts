@@ -35,7 +35,7 @@ export class ProductsController extends BaseController {
     ]);
   }
 
-  getAllProducts(request: Request, response: Response, next: NextFunction) {
+  getAllProducts({ body }: Request, response: Response, next: NextFunction) {
     //работа сервиса + репозитория
     return this.ok(response, 200);
   }
