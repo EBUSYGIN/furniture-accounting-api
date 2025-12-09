@@ -1,0 +1,31 @@
+{
+  "name": "furniture-accounting-api",
+  "version": "1.0.0",
+  "description": "Backend for accounting system",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "prisma generate",
+    "dev": "nodemon",
+    "dev:inspect": "nodemon -e ts,json --exec node --inspect=localhost:9229 -r ts-node/register src/main.ts",
+    "build": "tsc",
+    "start": "tsc && node ./dist/main.js"
+  },
+  "keywords": [
+    "Api",
+    "accounting",
+    "furniture"
+  ],
+  "author": "Egor Busygin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "inversify": "^7.10.6",
+    "nodemon": "^3.1.11",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
+  }
+}
