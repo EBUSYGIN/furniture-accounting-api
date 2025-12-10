@@ -1,0 +1,387 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Furniture Accounting API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/products": {
+      "get": {
+        "summary": "Получить список изделий",
+        "tags": ["Products"],
+        "responses": {
+          "200": {
+            "description": "Список изделий",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "products": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Product" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Создать изделие",
+        "tags": ["Products"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProductCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Созданное изделие",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "product": { "$ref": "#/components/schemas/Product" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка создания изделия" }
+        }
+      }
+    },
+    "/api/products/{id}": {
+      "get": {
+        "summary": "Получить изделие по id",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Изделие",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "product": { "$ref": "#/components/schemas/Product" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Некорректный id" },
+          "404": { "description": "Изделие не найдено" }
+        }
+      },
+      "put": {
+        "summary": "Обновить изделие",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProductCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Обновлённое изделие",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "product": { "$ref": "#/components/schemas/Product" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка обновления изделия" }
+        }
+      },
+      "delete": {
+        "summary": "Удалить изделие",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Изделие удалено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deleted": { "type": "boolean", "example": true }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка удаления изделия" }
+        }
+      }
+    },
+
+    "/api/materials": {
+      "get": {
+        "summary": "Получить список материалов",
+        "tags": ["Materials"],
+        "responses": {
+          "200": {
+            "description": "Список материалов",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "materials": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Material" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Создать материал",
+        "tags": ["Materials"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MaterialCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Созданный материал",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "material": { "$ref": "#/components/schemas/Material" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка создания материала" }
+        }
+      }
+    },
+    "/api/materials/{id}": {
+      "get": {
+        "summary": "Получить материал по id",
+        "tags": ["Materials"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Материал",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "material": { "$ref": "#/components/schemas/Material" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Некорректный id" },
+          "404": { "description": "Материал не найден" }
+        }
+      },
+      "put": {
+        "summary": "Обновить материал",
+        "tags": ["Materials"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MaterialCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Обновлённый материал",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "material": { "$ref": "#/components/schemas/Material" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка обновления материала" }
+        }
+      },
+      "delete": {
+        "summary": "Удалить материал",
+        "tags": ["Materials"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Материал удалён",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deleted": { "type": "boolean", "example": true }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка удаления материала" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProductCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Прихожая Венге Винтаж"
+          },
+          "typeId": {
+            "type": "integer",
+            "example": 2
+          },
+          "materialId": {
+            "type": "integer",
+            "example": 2
+          },
+          "minPrice": {
+            "type": "number",
+            "example": 24970
+          }
+        },
+        "required": ["name", "typeId", "materialId", "minPrice"]
+      },
+      "Product": {
+        "allOf": [
+          { "$ref": "#/components/schemas/ProductCreate" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer", "example": 3 },
+              "article": {
+                "type": "string",
+                "example": "3028272",
+                "description": "Генерируется на бэке"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        ]
+      },
+      "MaterialCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Мебельный щит из массива дерева"
+          },
+          "lossPercent": {
+            "type": "number",
+            "example": 5
+          }
+        },
+        "required": ["name", "lossPercent"]
+      },
+      "Material": {
+        "allOf": [
+          { "$ref": "#/components/schemas/MaterialCreate" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer", "example": 1 },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

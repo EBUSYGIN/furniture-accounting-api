@@ -13,6 +13,10 @@ import { PrismaService } from './common/database/prisma.service';
 import { ProductsService } from './services/products.service';
 import { IProductsRepository } from './repositories/products/products.interface';
 import { ProductsRepository } from './repositories/products/products.repository';
+import { IMaterialsRepository } from './repositories/material/material.interface';
+import { MaterialsRepository } from './repositories/material/material.repository';
+import { MaterialsService } from './services/material.service';
+import { MaterialsController } from './controllers/products/material.controller';
 
 export const appBindings = new ContainerModule((bind) => {
   bind
@@ -47,6 +51,21 @@ export const appBindings = new ContainerModule((bind) => {
   bind
     .bind<ProductsService>(TYPES.ProductsService)
     .to(ProductsService)
+    .inSingletonScope();
+
+  bind
+    .bind<IMaterialsRepository>(TYPES.MaterialsRepository)
+    .to(MaterialsRepository)
+    .inSingletonScope();
+
+  bind
+    .bind<MaterialsService>(TYPES.MaterialsService)
+    .to(MaterialsService)
+    .inSingletonScope();
+
+  bind
+    .bind<MaterialsController>(TYPES.MaterialsController)
+    .to(MaterialsController)
     .inSingletonScope();
 });
 

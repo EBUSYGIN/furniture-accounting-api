@@ -7,6 +7,9 @@ import { json } from 'body-parser';
 import { ILogger } from './common/logger/logger.interface';
 import { IExceptionFilter } from './common/errors/exception.filter.interface';
 import { PrismaService } from './common/database/prisma.service';
+import { MaterialsController } from './controllers/products/material.controller';
+import swaggerUi from 'swagger-ui-express';
+import * as swaggerDocument from '../swagger.json';
 
 @injectable()
 export class App {
@@ -14,12 +17,14 @@ export class App {
   server: Server;
   port: number;
   productsController: ProductsController;
+  materialsController: MaterialsController;
   loggerService: ILogger;
   exceptionFilter: IExceptionFilter;
   prismaService: PrismaService;
 
   constructor(
     @inject(TYPES.ProductsController) productsController: ProductsController,
+    @inject(TYPES.MaterialsController) materialsController: MaterialsController,
     @inject(TYPES.Logger) loggerService: ILogger,
     @inject(TYPES.ExceptionFilter) exceptionFilter: IExceptionFilter,
     @inject(TYPES.PrismaService) prismaService: PrismaService
@@ -31,6 +36,7 @@ export class App {
     this.loggerService = loggerService;
     this.exceptionFilter = exceptionFilter;
     this.prismaService = prismaService;
+    this.materialsController = materialsController;
   }
 
   useMiddleware() {
@@ -38,7 +44,12 @@ export class App {
   }
 
   useRoutes() {
-    this.app.use('/api', this.productsController.router);
+    this.app.use(
+      '/api',
+      this.productsController.router,
+      this.materialsController.router
+    );
+    this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
 
   useExceptionFilters() {
