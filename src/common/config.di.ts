@@ -1,5 +1,3 @@
-import { ProductsRepository } from '../repositories/products.repository';
-
 export const TYPES = {
   Application: Symbol.for('Application'),
   ProductsController: Symbol.for('ProductsController'),

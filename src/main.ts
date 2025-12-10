@@ -9,9 +9,10 @@ import { ConfigService } from './common/env/config.service';
 import { IExceptionFilter } from './common/errors/exception.filter.interface';
 import { ExceptionFilter } from './common/errors/exception.filter';
 import { PrismaService } from './common/database/prisma.service';
-import { IProductsRepository } from './repositories/products.interface';
-import { ProductsRepository } from './repositories/products.repository';
+
 import { ProductsService } from './services/products.service';
+import { IProductsRepository } from './repositories/products/products.interface';
+import { ProductsRepository } from './repositories/products/products.repository';
 
 export const appBindings = new ContainerModule((bind) => {
   bind
