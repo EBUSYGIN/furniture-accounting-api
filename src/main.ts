@@ -17,6 +17,14 @@ import { IMaterialsRepository } from './repositories/material/material.interface
 import { MaterialsRepository } from './repositories/material/material.repository';
 import { MaterialsService } from './services/material.service';
 import { MaterialsController } from './controllers/products/material.controller';
+import { ProductWorkshopsController } from './controllers/products/product-workshop.controller';
+import { WorkshopsController } from './controllers/products/workshop.controller';
+import { IProductWorkshopsRepository } from './repositories/product-workshop/product-workshop.interface';
+import { ProductWorkshopsRepository } from './repositories/product-workshop/product-workshop.repository';
+import { IWorkshopsRepository } from './repositories/workshop/workshop.interface';
+import { WorkshopsRepository } from './repositories/workshop/workshop.repository';
+import { ProductWorkshopsService } from './services/product-workshop.service';
+import { WorkshopsService } from './services/workshop.service';
 
 export const appBindings = new ContainerModule((bind) => {
   bind
@@ -66,6 +74,38 @@ export const appBindings = new ContainerModule((bind) => {
   bind
     .bind<MaterialsController>(TYPES.MaterialsController)
     .to(MaterialsController)
+    .inSingletonScope();
+
+  // Workshops
+  bind
+    .bind<IWorkshopsRepository>(TYPES.WorkshopsRepository)
+    .to(WorkshopsRepository)
+    .inSingletonScope();
+
+  bind
+    .bind<WorkshopsService>(TYPES.WorkshopsService)
+    .to(WorkshopsService)
+    .inSingletonScope();
+
+  bind
+    .bind<WorkshopsController>(TYPES.WorkshopsController)
+    .to(WorkshopsController)
+    .inSingletonScope();
+
+  // Product–Workshop relations
+  bind
+    .bind<IProductWorkshopsRepository>(TYPES.ProductWorkshopsRepository)
+    .to(ProductWorkshopsRepository)
+    .inSingletonScope();
+
+  bind
+    .bind<ProductWorkshopsService>(TYPES.ProductWorkshopsService)
+    .to(ProductWorkshopsService)
+    .inSingletonScope();
+
+  bind
+    .bind<ProductWorkshopsController>(TYPES.ProductWorkshopsController)
+    .to(ProductWorkshopsController)
     .inSingletonScope();
 });
 

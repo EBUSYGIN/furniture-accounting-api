@@ -1,9 +1,8 @@
-// src/services/materials.service.ts
 import { inject, injectable } from 'inversify';
 import { ILogger } from '../common/logger/logger.interface';
 import { TYPES } from '../common/config.di';
 import { MaterialDto } from '../dto/material.dto';
-import { MaterialEntity } from '../entitites/material.entity';
+import { Prisma } from '../../generated/prisma/client';
 import { IMaterialsRepository } from '../repositories/material/material.interface';
 
 @injectable()
@@ -11,7 +10,8 @@ export class MaterialsService {
   constructor(
     @inject(TYPES.MaterialsRepository)
     private materialsRepository: IMaterialsRepository,
-    @inject(TYPES.Logger) private loggerService: ILogger
+    @inject(TYPES.Logger)
+    private loggerService: ILogger
   ) {}
 
   async findAll() {
@@ -27,26 +27,41 @@ export class MaterialsService {
   }
 
   async create(dto: MaterialDto) {
-    const entity = new MaterialEntity(dto.name, dto.lossPercent);
+    try {
+      const material = await this.materialsRepository.createMaterial({
+        name: dto.name,
+        lossPercent: dto.lossPercent,
+      });
 
-    const material = await this.materialsRepository.createMaterial(
-      entity.toCreateData()
-    );
+      this.loggerService.log(
+        `[MaterialsService] Создан материал ${material.id} (${material.name})`
+      );
 
-    this.loggerService.log(
-      `[MaterialsService] Создан материал ${material.id} (${material.name})`
-    );
-
-    return material;
+      return material;
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        this.loggerService.error(
+          `[MaterialsService] Материал с таким именем уже существует`
+        );
+      } else {
+        this.loggerService.error(
+          `[MaterialsService] Ошибка при создании материала: ${
+            error instanceof Error ? error.message : String(error)
+          }`
+        );
+      }
+      throw error;
+    }
   }
 
   async update(id: number, dto: MaterialDto) {
-    const entity = new MaterialEntity(dto.name, dto.lossPercent);
-
-    const material = await this.materialsRepository.updateMaterial(
-      id,
-      entity.toUpdateData()
-    );
+    const material = await this.materialsRepository.updateMaterial(id, {
+      name: dto.name,
+      lossPercent: dto.lossPercent,
+    });
 
     this.loggerService.log(
       `[MaterialsService] Обновлён материал ${material.id} (${material.name})`

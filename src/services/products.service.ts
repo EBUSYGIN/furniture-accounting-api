@@ -1,11 +1,9 @@
 import { inject, injectable } from 'inversify';
 import { ILogger } from '../common/logger/logger.interface';
-
 import { TYPES } from '../common/config.di';
 import { ProductDto } from '../dto/product.dto';
-import { ProductEntity } from '../entitites/product.entity';
 import { IProductsRepository } from '../repositories/products/products.interface';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../../generated/prisma/client';
 
 function generateArticle(): string {
   const min = 1000000;
@@ -15,16 +13,12 @@ function generateArticle(): string {
 
 @injectable()
 export class ProductsService {
-  private loggerService: ILogger;
-  private productsRepository: IProductsRepository;
-
   constructor(
-    @inject(TYPES.ProductsRepository) productsRepository: IProductsRepository,
-    @inject(TYPES.Logger) loggerService: ILogger
-  ) {
-    this.loggerService = loggerService;
-    this.productsRepository = productsRepository;
-  }
+    @inject(TYPES.ProductsRepository)
+    private productsRepository: IProductsRepository,
+    @inject(TYPES.Logger)
+    private loggerService: ILogger
+  ) {}
 
   async findAll() {
     return this.productsRepository.getAllProducts();
@@ -40,29 +34,25 @@ export class ProductsService {
 
   async create(dto: ProductDto) {
     try {
-      const entity = new ProductEntity(
-        dto.name,
-        dto.typeId,
-        dto.materialId,
-        dto.minPrice
-      );
-
+      // генерим article, пока не пройдём уникальное ограничение
       let product;
-
-      // Пытаемся сгенерировать уникальный артикул
       for (;;) {
         const article = generateArticle();
         try {
-          product = await this.productsRepository.createProduct(
-            entity.toCreateData(article)
-          );
+          product = await this.productsRepository.createProduct({
+            name: dto.name,
+            article,
+            typeId: dto.typeId,
+            materialId: dto.materialId,
+            minPrice: dto.minPrice,
+          });
           break;
         } catch (error) {
           if (
             error instanceof Prisma.PrismaClientKnownRequestError &&
             error.code === 'P2002'
           ) {
-            // дубликат article — пробуем сгенерировать новый
+            // дубликат article, пробуем ещё раз
             continue;
           }
           throw error;
@@ -85,17 +75,13 @@ export class ProductsService {
   }
 
   async update(id: number, dto: ProductDto) {
-    const entity = new ProductEntity(
-      dto.name,
-      dto.typeId,
-      dto.materialId,
-      dto.minPrice
-    );
-
-    const product = await this.productsRepository.updateProduct(
-      id,
-      entity.toUpdateData()
-    );
+    const product = await this.productsRepository.updateProduct(id, {
+      name: dto.name,
+      typeId: dto.typeId,
+      materialId: dto.materialId,
+      minPrice: dto.minPrice,
+      // article генерится только при создании, при обновлении не трогаем
+    });
 
     this.loggerService.log(
       `[ProductsService] Обновлено изделие ${product.id} (${product.article})`
@@ -106,9 +92,11 @@ export class ProductsService {
 
   async delete(id: number) {
     const product = await this.productsRepository.deleteProduct(id);
+
     this.loggerService.log(
       `[ProductsService] Удалено изделие ${product.id} (${product.article})`
     );
+
     return product;
   }
 

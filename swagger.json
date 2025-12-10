@@ -299,6 +299,362 @@
           "400": { "description": "Ошибка удаления материала" }
         }
       }
+    },
+
+    "/api/workshops": {
+      "get": {
+        "summary": "Получить список цехов",
+        "tags": ["Workshops"],
+        "responses": {
+          "200": {
+            "description": "Список цехов",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "workshops": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Workshop" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Создать цех",
+        "tags": ["Workshops"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WorkshopCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Созданный цех",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "workshop": { "$ref": "#/components/schemas/Workshop" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка создания цеха" }
+        }
+      }
+    },
+    "/api/workshops/{id}": {
+      "get": {
+        "summary": "Получить цех по id",
+        "tags": ["Workshops"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Цех",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "workshop": { "$ref": "#/components/schemas/Workshop" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Некорректный id" },
+          "404": { "description": "Цех не найден" }
+        }
+      },
+      "put": {
+        "summary": "Обновить цех",
+        "tags": ["Workshops"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WorkshopCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Обновлённый цех",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "workshop": { "$ref": "#/components/schemas/Workshop" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка обновления цеха" }
+        }
+      },
+      "delete": {
+        "summary": "Удалить цех",
+        "tags": ["Workshops"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Цех удалён",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deleted": { "type": "boolean", "example": true }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка удаления цеха" }
+        }
+      }
+    },
+
+    "/api/product-workshops": {
+      "post": {
+        "summary": "Создать связь продукт-цех",
+        "tags": ["ProductWorkshops"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProductWorkshopCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Созданная связь продукт-цех",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "productWorkshop": {
+                      "$ref": "#/components/schemas/ProductWorkshop"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка создания связи" }
+        }
+      }
+    },
+    "/api/product-workshops/{id}": {
+      "put": {
+        "summary": "Обновить связь продукт-цех",
+        "tags": ["ProductWorkshops"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProductWorkshopUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Обновлённая связь продукт-цех",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "productWorkshop": {
+                      "$ref": "#/components/schemas/ProductWorkshop"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка обновления связи" }
+        }
+      },
+      "delete": {
+        "summary": "Удалить связь продукт-цех",
+        "tags": ["ProductWorkshops"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Связь удалена",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deleted": { "type": "boolean", "example": true }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Ошибка удаления связи" }
+        }
+      }
+    },
+
+    "/api/products/{productId}/workshops": {
+      "get": {
+        "summary": "Получить все цехи для изделия",
+        "tags": ["ProductWorkshops"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список связей продукт-цех",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "productWorkshops": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ProductWorkshop"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Некорректный id продукта" }
+        }
+      }
+    },
+
+    "/api/workshops/{workshopId}/products": {
+      "get": {
+        "summary": "Получить все изделия, проходящие через цех",
+        "tags": ["ProductWorkshops"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workshopId",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список связей продукт-цех",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "productWorkshops": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ProductWorkshop"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Некорректный id цеха" }
+        }
+      }
+    },
+
+    "/api/products/{productId}/production-time": {
+      "get": {
+        "summary": "Получить суммарное время изготовления изделия по всем цехам",
+        "tags": ["ProductWorkshops"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Суммарное время изготовления",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "productId": { "type": "integer", "example": 1 },
+                    "totalProductionTime": {
+                      "type": "number",
+                      "example": 12.5
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Некорректный id продукта" }
+        }
+      }
     }
   },
   "components": {
@@ -335,7 +691,7 @@
               "article": {
                 "type": "string",
                 "example": "3028272",
-                "description": "Генерируется на бэке"
+                "description": "Генерируется на сервере"
               },
               "createdAt": {
                 "type": "string",
@@ -349,6 +705,7 @@
           }
         ]
       },
+
       "MaterialCreate": {
         "type": "object",
         "properties": {
@@ -378,6 +735,59 @@
                 "type": "string",
                 "format": "date-time"
               }
+            }
+          }
+        ]
+      },
+
+      "WorkshopCreate": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "example": "Раскроя" },
+          "type": { "type": "string", "example": "Обработка" },
+          "workers": { "type": "integer", "example": 5 }
+        },
+        "required": ["name", "type", "workers"]
+      },
+      "Workshop": {
+        "allOf": [
+          { "$ref": "#/components/schemas/WorkshopCreate" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer", "example": 1 },
+              "createdAt": { "type": "string", "format": "date-time" },
+              "updatedAt": { "type": "string", "format": "date-time" }
+            }
+          }
+        ]
+      },
+
+      "ProductWorkshopCreate": {
+        "type": "object",
+        "properties": {
+          "productId": { "type": "integer", "example": 1 },
+          "workshopId": { "type": "integer", "example": 3 },
+          "productionTime": { "type": "number", "example": 2.5 }
+        },
+        "required": ["productId", "workshopId", "productionTime"]
+      },
+      "ProductWorkshopUpdate": {
+        "type": "object",
+        "properties": {
+          "productionTime": { "type": "number", "example": 3.0 }
+        },
+        "required": ["productionTime"]
+      },
+      "ProductWorkshop": {
+        "allOf": [
+          { "$ref": "#/components/schemas/ProductWorkshopCreate" },
+          {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer", "example": 10 },
+              "createdAt": { "type": "string", "format": "date-time" },
+              "updatedAt": { "type": "string", "format": "date-time" }
             }
           }
         ]

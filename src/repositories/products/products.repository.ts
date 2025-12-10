@@ -1,56 +1,59 @@
-import { injectable, inject } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { TYPES } from '../../common/config.di';
 import { PrismaService } from '../../common/database/prisma.service';
-import { IProductsRepository } from './products.interface';
+import { Prisma, Product } from '@prisma/client';
 
 @injectable()
-export class ProductsRepository implements IProductsRepository {
+export class ProductsRepository {
   constructor(
     @inject(TYPES.PrismaService) private prismaService: PrismaService
   ) {}
 
-  async getAllProducts() {
+  async getAllProducts(): Promise<Product[]> {
     return this.prismaService.client.product.findMany();
   }
 
-  async getProductById(id: number) {
+  async getProductById(id: number): Promise<Product | null> {
     return this.prismaService.client.product.findFirst({
       where: { id },
     });
   }
 
-  async getProductByArticle(article: string) {
+  async getProductByArticle(article: string): Promise<Product | null> {
     return this.prismaService.client.product.findFirst({
       where: { article },
     });
   }
 
-  async createProduct(data: any) {
-    return this.prismaService.client.product.create({
-      data,
-    });
+  async createProduct(
+    data: Prisma.ProductCreateInput | Prisma.ProductUncheckedCreateInput
+  ): Promise<Product> {
+    return this.prismaService.client.product.create({ data });
   }
 
-  async updateProduct(id: number, data: any) {
+  async updateProduct(
+    id: number,
+    data: Prisma.ProductUpdateInput | Prisma.ProductUncheckedUpdateInput
+  ): Promise<Product> {
     return this.prismaService.client.product.update({
       where: { id },
       data,
     });
   }
 
-  async deleteProduct(id: number) {
+  async deleteProduct(id: number): Promise<Product> {
     return this.prismaService.client.product.delete({
       where: { id },
     });
   }
 
-  async getProductsByType(typeId: number) {
+  async getProductsByType(typeId: number): Promise<Product[]> {
     return this.prismaService.client.product.findMany({
       where: { typeId },
     });
   }
 
-  async getProductsByMaterial(materialId: number) {
+  async getProductsByMaterial(materialId: number): Promise<Product[]> {
     return this.prismaService.client.product.findMany({
       where: { materialId },
     });
