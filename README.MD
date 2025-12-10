@@ -23,19 +23,3 @@ npm run dev
 
 API: http://localhost:3000/api
 Swagger: http://localhost:3000/api-docs
-
-## 📋 API
-
-| Метод | Эндпоинт                 | Описание          |
-| ----- | ------------------------ | ----------------- |
-| GET   | `/api/products`          | Список изделий    |
-| POST  | `/api/products`          | Создать изделие   |
-| GET   | `/api/materials`         | Список материалов |
-| POST  | `/api/workshops`         | Создать цех       |
-| POST  | `/api/product-workshops` | Связь изделие-цех |
-
-## Скрипты
-
-npm run dev # разработка
-npm run start # продакшн
-npm run build # сборка
