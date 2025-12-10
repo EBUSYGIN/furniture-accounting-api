@@ -15,7 +15,7 @@ npx prisma generate
 # 3. Создание и миграция БД (создаст таблицы автоматически)
 
 npx prisma migrate dev --name init\
-npx prisma db seed
+npm run seed
 
 # 4. Старт сервера
 
