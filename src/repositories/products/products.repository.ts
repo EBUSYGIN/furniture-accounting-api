@@ -10,7 +10,12 @@ export class ProductsRepository {
   ) {}
 
   async getAllProducts(): Promise<Product[]> {
-    return this.prismaService.client.product.findMany();
+    return this.prismaService.client.product.findMany({
+      include: {
+        material: true,
+        type: true,
+      },
+    });
   }
 
   async getProductById(id: number): Promise<Product | null> {
