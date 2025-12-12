@@ -7,6 +7,7 @@ import { json } from 'body-parser';
 import { ILogger } from './common/logger/logger.interface';
 import { IExceptionFilter } from './common/errors/exception.filter.interface';
 import { PrismaService } from './common/database/prisma.service';
+import cors from 'cors';
 import { MaterialsController } from './controllers/products/material.controller';
 import swaggerUi from 'swagger-ui-express';
 import * as swaggerDocument from '../swagger.json';
@@ -41,6 +42,7 @@ export class App {
 
   useMiddleware() {
     this.app.use(json());
+    this.app.use(cors({ origin: 'http://localhost:5173' }));
   }
 
   useRoutes() {
