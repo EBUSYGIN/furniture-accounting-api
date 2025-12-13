@@ -11,7 +11,15 @@ export class WorkshopsRepository implements IWorkshopsRepository {
   ) {}
 
   async getAllWorkshops(): Promise<Workshop[]> {
-    return this.prismaService.client.workshop.findMany();
+    return this.prismaService.client.workshop.findMany({
+      include: {
+        products: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
   }
 
   async getWorkshopById(id: number): Promise<Workshop | null> {

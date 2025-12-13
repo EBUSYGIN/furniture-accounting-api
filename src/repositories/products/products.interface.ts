@@ -1,4 +1,4 @@
-import { Product, Prisma } from '@prisma/client';
+import { Product, Prisma, ProductType } from '@prisma/client';
 
 export interface IProductsRepository {
   getAllProducts: () => Promise<Product[]>;
@@ -14,4 +14,8 @@ export interface IProductsRepository {
   deleteProduct: (id: number) => Promise<Product>;
   getProductsByType: (typeId: number) => Promise<Product[]>;
   getProductsByMaterial: (materialId: number) => Promise<Product[]>;
+  getAllProductTypes: () => Promise<ProductType[]>;
+  getProductWithMaterialById(
+    id: number
+  ): Promise<Prisma.ProductGetPayload<{ include: { material: true } }> | null>;
 }

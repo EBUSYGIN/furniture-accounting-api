@@ -14,6 +14,11 @@ export class ProductsRepository {
       include: {
         material: true,
         type: true,
+        workshops: {
+          include: {
+            workshop: true,
+          },
+        },
       },
     });
   }
@@ -61,6 +66,19 @@ export class ProductsRepository {
   async getProductsByMaterial(materialId: number): Promise<Product[]> {
     return this.prismaService.client.product.findMany({
       where: { materialId },
+    });
+  }
+
+  async getAllProductTypes() {
+    return this.prismaService.client.productType.findMany();
+  }
+
+  async getProductWithMaterialById(id: number) {
+    return this.prismaService.client.product.findFirst({
+      where: { id },
+      include: {
+        material: true,
+      },
     });
   }
 }

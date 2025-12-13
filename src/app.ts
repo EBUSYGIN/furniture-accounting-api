@@ -11,6 +11,7 @@ import cors from 'cors';
 import { MaterialsController } from './controllers/products/material.controller';
 import swaggerUi from 'swagger-ui-express';
 import * as swaggerDocument from '../swagger.json';
+import { WorkshopsController } from './controllers/products/workshop.controller';
 
 @injectable()
 export class App {
@@ -22,13 +23,15 @@ export class App {
   loggerService: ILogger;
   exceptionFilter: IExceptionFilter;
   prismaService: PrismaService;
+  workshopsController: WorkshopsController;
 
   constructor(
     @inject(TYPES.ProductsController) productsController: ProductsController,
     @inject(TYPES.MaterialsController) materialsController: MaterialsController,
     @inject(TYPES.Logger) loggerService: ILogger,
     @inject(TYPES.ExceptionFilter) exceptionFilter: IExceptionFilter,
-    @inject(TYPES.PrismaService) prismaService: PrismaService
+    @inject(TYPES.PrismaService) prismaService: PrismaService,
+    @inject(TYPES.WorkshopsController) workshopsController: WorkshopsController
   ) {
     this.app = express();
     this.port = 8000;
@@ -38,18 +41,20 @@ export class App {
     this.exceptionFilter = exceptionFilter;
     this.prismaService = prismaService;
     this.materialsController = materialsController;
+    this.workshopsController = workshopsController;
   }
 
   useMiddleware() {
     this.app.use(json());
-    this.app.use(cors({ origin: 'http://localhost:5173' }));
+    this.app.use(cors());
   }
 
   useRoutes() {
     this.app.use(
       '/api',
       this.productsController.router,
-      this.materialsController.router
+      this.materialsController.router,
+      this.workshopsController.router
     );
     this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }

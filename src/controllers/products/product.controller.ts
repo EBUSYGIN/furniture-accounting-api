@@ -18,6 +18,11 @@ export class ProductsController extends BaseController {
         func: this.getAllProducts,
       },
       {
+        path: '/products/types',
+        method: 'get',
+        func: this.getProductTypes,
+      },
+      {
         path: '/products/:id',
         method: 'get',
         func: this.getProductById,
@@ -37,6 +42,11 @@ export class ProductsController extends BaseController {
         method: 'delete',
         func: this.deleteProduct,
       },
+      {
+        path: '/products/:id/material-consumption',
+        method: 'get',
+        func: this.calculateMaterialConsumption,
+      },
     ]);
   }
 
@@ -52,6 +62,15 @@ export class ProductsController extends BaseController {
     }
 
     this.ok(response, { products });
+  }
+
+  async getProductTypes(req: Request, res: Response) {
+    try {
+      const productTypes = await this.productsService.getAllProductTypes();
+      res.json({ productTypes });
+    } catch (error) {
+      res.status(500).json({ error: 'Ошибка получения типов продуктов' });
+    }
   }
 
   async getProductById(
@@ -122,6 +141,32 @@ export class ProductsController extends BaseController {
       this.ok(response, { deleted: true });
     } catch (e) {
       next(new HTTPError(400, 'Ошибка удаления изделия'));
+    }
+  }
+
+  async calculateMaterialConsumption(req: Request, res: Response) {
+    try {
+      const productId = Number(req.params.id);
+      const quantity = req.query.quantity ? Number(req.query.quantity) : 1; // по умолчанию считаем для 1 изделия
+
+      if (Number.isNaN(productId) || productId <= 0) {
+        return res.status(400).json({ error: 'Некорректный id изделия' });
+      }
+
+      if (Number.isNaN(quantity) || quantity <= 0) {
+        return res.status(400).json({ error: 'quantity должен быть > 0' });
+      }
+
+      const result = await this.productsService.calculateMaterialConsumption(
+        productId,
+        quantity
+      );
+
+      return res.json(result);
+    } catch (error) {
+      return res.status(500).json({
+        error: error instanceof Error ? error.message : 'Ошибка расчёта сырья',
+      });
     }
   }
 }

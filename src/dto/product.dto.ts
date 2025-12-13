@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsInt,
   IsNotEmpty,
@@ -11,10 +12,12 @@ export class ProductDto {
   @IsNotEmpty()
   name: string;
 
+  @Transform(({ value }) => Number(value))
   @IsInt()
   @IsPositive()
   typeId: number;
 
+  @Transform(({ value }) => Number(value))
   @IsInt()
   @IsPositive()
   materialId: number;
